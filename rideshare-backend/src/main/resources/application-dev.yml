@@ -1,0 +1,30 @@
+# Local development profile. Safe defaults so `./mvnw spring-boot:run` works against
+# the docker-compose PostgreSQL instance. NEVER use these values in production.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/rideshare}
+    username: ${DB_USERNAME:rideshare}
+    password: ${DB_PASSWORD:rideshare}
+
+app:
+  jwt:
+    # Development-only secret (>= 32 bytes). Production requires JWT_SECRET to be set.
+    secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdefghijklmnop}
+  cors:
+    allowed-origins: ${FRONTEND_URL:http://localhost:3000,http://localhost:5173}
+  admin:
+    email: ${ADMIN_EMAIL:admin@rideshare.local}
+    password: ${ADMIN_PASSWORD:Admin@12345}
+  otp:
+    log-codes: ${OTP_LOG_CODES:true}
+  password-reset:
+    frontend-reset-url: ${FRONTEND_URL:http://localhost:5173}/reset-password
+    log-token: true
+  vehicle:
+    verification-required: ${VEHICLE_VERIFICATION_REQUIRED:false}
+  ride:
+    start-allowed-before-departure: ${RIDE_START_WINDOW:P30D}
+
+logging:
+  level:
+    com.rideshare: DEBUG

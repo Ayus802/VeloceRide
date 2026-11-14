@@ -1,0 +1,30 @@
+# Production profile. Every secret MUST come from the environment; there are no defaults here.
+# Startup fails fast if DB_URL, DB_USERNAME, DB_PASSWORD, JWT_SECRET or FRONTEND_URL are missing.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:20}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+  cors:
+    allowed-origins: ${FRONTEND_URL}
+  password-reset:
+    log-token: false
+  vehicle:
+    verification-required: true
+
+springdoc:
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:true}
+
+logging:
+  level:
+    root: INFO
+    com.rideshare: INFO

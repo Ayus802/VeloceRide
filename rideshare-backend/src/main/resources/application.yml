@@ -1,0 +1,117 @@
+# Base configuration shared by every profile.
+# Secrets and environment-specific values are injected through environment variables.
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+
+spring:
+  application:
+    name: rideshare-backend
+  config:
+    # Load local secrets from .env when present (gitignored). Real env vars still take precedence.
+    # Second path covers launching from the parent workspace folder (e.g. VS Code Run/Debug).
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:rideshare-backend/.env[.properties]
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # schema is owned by Flyway; Hibernate only validates it
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        default_batch_fetch_size: 50
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+  mvc:
+    problemdetails:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    persist-authorization: true
+  default-produces-media-type: application/json
+
+app:
+  time-zone: ${APP_TIME_ZONE:Asia/Kolkata}
+  jwt:
+    secret: ${JWT_SECRET}
+    access-expiration: ${JWT_ACCESS_EXPIRATION:PT15M}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:P7D}
+    issuer: rideshare-backend
+  cors:
+    allowed-origins: ${FRONTEND_URL}
+  admin:
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}
+    full-name: ${ADMIN_FULL_NAME:Platform Admin}
+    phone-number: ${ADMIN_PHONE:+10000000000}
+  password-reset:
+    token-validity: PT30M
+    frontend-reset-url: ${FRONTEND_URL}/reset-password
+    log-token: false
+  vehicle:
+    verification-required: ${VEHICLE_VERIFICATION_REQUIRED:true}
+  ride:
+    # How long before the scheduled departure a driver may start the ride.
+    start-allowed-before-departure: ${RIDE_START_WINDOW:PT2H}
+  location:
+    min-update-interval: ${LOCATION_MIN_UPDATE_INTERVAL:PT2S}
+    history-enabled: ${LOCATION_HISTORY_ENABLED:true}
+    max-client-clock-skew: PT5M
+  payment:
+    provider: simulated
+  otp:
+    validity: ${OTP_VALIDITY:PT10M}
+    resend-cooldown: ${OTP_RESEND_COOLDOWN:PT60S}
+    max-attempts: ${OTP_MAX_ATTEMPTS:5}
+    challenge-validity: PT30M
+    max-sends-per-hour: ${OTP_MAX_SENDS_PER_HOUR:5}
+    # DEV ONLY: print codes to the server log when no email/SMS provider is configured.
+    log-codes: ${OTP_LOG_CODES:false}
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    starttls: ${MAIL_STARTTLS:true}
+    from: ${MAIL_FROM:}
+  sms:
+    twilio-account-sid: ${TWILIO_ACCOUNT_SID:}
+    twilio-auth-token: ${TWILIO_AUTH_TOKEN:}
+    twilio-from-number: ${TWILIO_FROM_NUMBER:}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}

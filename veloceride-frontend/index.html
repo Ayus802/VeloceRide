@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0B1220" />
+    <meta name="description" content="VeloceRide — find affordable rides, share travel costs and publish your own journeys." />
+    <script>
+      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
+      // Keep in sync with src/theme/useTheme.ts (key 'veloceride.theme').
+      (function () {
+        var pref = 'system';
+        try {
+          pref = localStorage.getItem('veloceride.theme') || 'system';
+        } catch (e) {}
+        var dark = pref === 'dark' || (pref !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var theme = dark ? 'dark' : 'light';
+        var root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+        root.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#0B1220' : '#F7F9FC');
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>VeloceRide — Your journey, shared</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

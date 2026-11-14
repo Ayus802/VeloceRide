@@ -1,0 +1,30 @@
+# Test profile. The datasource is supplied by Testcontainers (@ServiceConnection).
+app:
+  otp:
+    resend-cooldown: PT1S
+  google:
+    client-id: test-client-id.apps.googleusercontent.com
+  jwt:
+    secret: test-secret-for-integration-tests-0123456789abcdefghijkl
+    access-expiration: PT15M
+    refresh-expiration: P7D
+  cors:
+    allowed-origins: http://localhost:5173
+  admin:
+    email: admin@test.local
+    password: Admin@12345
+  password-reset:
+    frontend-reset-url: http://localhost:5173/reset-password
+    log-token: false
+  vehicle:
+    verification-required: false
+  ride:
+    start-allowed-before-departure: P30D
+  location:
+    min-update-interval: PT0S
+    history-enabled: true
+
+logging:
+  level:
+    com.rideshare: INFO
+    org.testcontainers: WARN

@@ -1,0 +1,49 @@
+# Local stack: PostgreSQL + the backend.
+#   cp .env.example .env   (then edit secrets)
+#   docker compose up --build
+# To run only the database (and the app from your IDE / ./mvnw spring-boot:run):
+#   docker compose up -d postgres
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rideshare-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rideshare}
+      POSTGRES_USER: ${DB_USERNAME:-rideshare}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-rideshare}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: rideshare-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      SERVER_PORT: 8080
+      DB_URL: ${DB_URL:-jdbc:postgresql://postgres:5432/${POSTGRES_DB:-rideshare}}
+      DB_USERNAME: ${DB_USERNAME:-rideshare}
+      DB_PASSWORD: ${DB_PASSWORD:-rideshare}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set in .env}
+      JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION:-PT15M}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-P7D}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      APP_TIME_ZONE: ${APP_TIME_ZONE:-Asia/Kolkata}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+
+volumes:
+  postgres-data:

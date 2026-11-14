@@ -1,0 +1,102 @@
+/*
+ * VeloceRide design tokens.
+ * Components use Tailwind utilities (bg-bg, bg-surface, text-ink, text-muted, border-line, bg-accent, …).
+ * `@theme inline` maps those utilities to the --vr-* variables below, which change with [data-theme].
+ * Both themes are designed independently; the light theme is not an inversion of the dark one.
+ */
+@theme inline {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-bg: var(--vr-bg); /* page background */
+  --color-bg-2: var(--vr-bg-2); /* panels, inputs, menus, dialogs */
+  --color-surface: var(--vr-surface); /* hover fills, subtle blocks */
+  --color-surface-2: var(--vr-surface-2); /* selected states, avatars */
+  --color-line: var(--vr-line);
+  --color-line-strong: var(--vr-line-strong);
+
+  --color-ink: var(--vr-ink);
+  --color-muted: var(--vr-muted);
+  --color-faint: var(--vr-faint);
+
+  --color-accent: var(--vr-accent);
+  --color-accent-hover: var(--vr-accent-hover);
+  --color-accent-ink: var(--vr-accent-ink);
+  --color-accent-soft: var(--vr-accent-soft);
+  --color-accent-bright: var(--vr-accent-bright);
+
+  --color-success: var(--vr-success);
+  --color-warning: var(--vr-warning);
+  --color-danger: var(--vr-danger);
+  --color-danger-soft: var(--vr-danger-soft);
+  --color-overlay: var(--vr-overlay);
+
+  --shadow-pop: var(--vr-shadow-pop);
+  --shadow-card: var(--vr-shadow-card);
+}
+
+/* Dark (default before JS runs and when chosen / system-dark) */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --vr-bg: #0b1220;
+  --vr-bg-2: #111c2e;
+  --vr-surface: #172438;
+  --vr-surface-2: #1d2b40;
+  --vr-line: #29384d;
+  --vr-line-strong: #364860;
+
+  --vr-ink: #f1f5f9;
+  --vr-muted: #a1aec0;
+  --vr-faint: #77869b;
+
+  --vr-accent: #22c7b5;
+  --vr-accent-hover: #18a999;
+  --vr-accent-ink: #042420; /* text on accent fills */
+  --vr-accent-soft: rgb(34 199 181 / 0.12);
+  --vr-accent-bright: #22c7b5; /* indicators, map markers */
+
+  --vr-success: #34d399;
+  --vr-warning: #fbbf24;
+  --vr-danger: #f87171;
+  --vr-danger-soft: rgb(248 113 113 / 0.12);
+  --vr-overlay: rgb(3 7 15 / 0.65);
+
+  --vr-shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.25);
+  --vr-shadow-card: none;
+  --vr-map-filter: brightness(0.82) saturate(0.85) contrast(1.05);
+}
+
+/*
+ * Light: soft off-white page with white panels separated by subtle borders.
+ * Accent is a deeper teal than the brief's #0F9F91 for text/buttons so links and white-on-teal
+ * button labels meet WCAG AA (4.5:1); #0F9F91 is kept for non-text indicators.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+  --vr-bg: #f7f9fc;
+  --vr-bg-2: #ffffff;
+  --vr-surface: #f0f3f8;
+  --vr-surface-2: #e7ecf3;
+  --vr-line: #e3e9f1;
+  --vr-line-strong: #cdd6e2;
+
+  --vr-ink: #172033;
+  --vr-muted: #586579;
+  --vr-faint: #657284;
+
+  --vr-accent: #0b7f75;
+  --vr-accent-hover: #096a62;
+  --vr-accent-ink: #ffffff;
+  --vr-accent-soft: rgb(15 159 145 / 0.1);
+  --vr-accent-bright: #0f9f91;
+
+  --vr-success: #16865d;
+  --vr-warning: #a86a0a;
+  --vr-danger: #c43e45;
+  --vr-danger-soft: rgb(196 62 69 / 0.08);
+  --vr-overlay: rgb(23 32 51 / 0.35);
+
+  --vr-shadow-pop: 0 12px 32px -10px rgb(23 32 51 / 0.18), 0 2px 6px rgb(23 32 51 / 0.06);
+  --vr-shadow-card: 0 1px 2px rgb(23 32 51 / 0.04);
+  --vr-map-filter: none;
+}
